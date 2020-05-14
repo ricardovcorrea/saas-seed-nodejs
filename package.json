@@ -2,10 +2,10 @@
   "name": "saas-seed",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "dev": "tsc && ts-node-dev server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "npm run tsc",
     "heroku-postbuild": "cd admin && npm install --only=dev && npm install && npm run build"
   },
   "author": "",
