@@ -2,9 +2,9 @@ import express from 'express';
 import path from 'path';
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = 5000;
 
-// Serve the static files from the React app
+// // Serve the static files from the React app
 // app.use(express.static(path.join(__dirname, 'admin/build')));
 
 app.get('/teste', (req, res) => {
@@ -17,6 +17,7 @@ app.get('/teste', (req, res) => {
 // });
   
 app.listen(port, err => {
+  console.log('teste');
   if (err) {
     return console.error(err);
   }
