@@ -15,8 +15,8 @@ app.get('/teste', (req, res) => {
 // app.get('*', (req,res) =>{
 // 	res.sendFile(path.join(__dirname+'/admin/build/index.html'));
 // });
-
-app.listen((port, err) => {
+  
+app.listen(port, err => {
   if (err) {
     return console.error(err);
   }
