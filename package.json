@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "tsc && ts-node-dev server.ts",
     "build": "tsc",
+    "postinstall": "build",
     "heroku-postbuild": "cd admin && npm install --only=dev && npm install && npm run build",
     "start": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
