@@ -5,8 +5,10 @@
   "scripts": {
     "start": "node dist/server.js",
     "dev": "ts-node-dev server.ts",
+    "build:api": "tsc",
     "build": "grunt build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typeorm": "./node_modules/.bin/typeorm "
   },
   "author": "",
   "license": "ISC",
@@ -15,8 +17,15 @@
     "tslint": "^6.1.2"
   },
   "dependencies": {
+    "@sentry/node": "^5.15.5",
+    "@sentry/types": "^5.15.5",
+    "@types/body-parser": "^1.19.0",
+    "@types/compression": "^1.7.0",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.6",
+    "@types/node": "^14.0.1",
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "grunt": "^1.1.0",
@@ -25,6 +34,10 @@
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-exec": "^3.0.0",
+    "mysql": "^2.18.1",
+    "reflect-metadata": "^0.1.13",
+    "typedi": "^0.8.0",
+    "typeorm": "^0.2.24",
     "typescript": "^3.9.2"
   },
   "engines": {
