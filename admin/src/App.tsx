@@ -1,26 +1,25 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Admin, Resource } from 'react-admin';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import AuthProvider from './Providers/AuthProvider';
+import Provider from './Providers/DataProvider';
+import { SocketProvider } from './Providers/SocketProvider';
+
+import StatisticsReducer from './Reducers/Statistics';
+
+import Layout from './General/Layout';
+import Theme from './General/Theme';
+
+import Dashboard from './Pages/Dashboard';
+import { QuestionList, QuestionCreate, QuestionEdit } from './Resources/Question';
+
+const App = () => (
+
+  <Admin layout={Layout} dataProvider={Provider()} authProvider={AuthProvider()} dashboard={Dashboard} theme={Theme} customReducers={{ statistics: StatisticsReducer }}>
+    <SocketProvider />
+    <Resource name="questions" options={{ label: 'Questions' }} list={QuestionList} create={QuestionCreate} edit={QuestionEdit} />
+  </Admin>
+
+);
 
 export default App;
