@@ -8,13 +8,13 @@ module.exports = {
     "username": process.env.DB_USER,
     "password": process.env.DB_PASSWORD,
     "entities": [
-        "api/model/*.js"
+        "core/model/*.ts"
     ],
     "migrations": [
-        "database/migration/*.js"
+        "database/migration/main/*.ts"
     ],
     "cli": {
-        "entitiesDir": "api/model/",
-        "migrationsDir": "database/migration"
+        "entitiesDir": "code/model/",
+        "migrationsDir": "database/migration/main"
     }
 }

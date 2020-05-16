@@ -32,6 +32,9 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('dev', ['concurrent:dev']);
+    
+    grunt.registerTask('build:api', ['clean:build', 'exec:build_api']);
+    
     grunt.registerTask('build', ['clean:build', 'concurrent:build', 'copy:admin']);
 
 };
