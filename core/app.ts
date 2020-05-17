@@ -9,7 +9,7 @@ import { Service, Container } from "typedi";
 import bodyParser from 'body-parser';
 import compress from 'compression';
 
-import DatabaseManager from '../database/connection';
+import DatabaseManager from '../database/databaseManager';
 import Logger from '../helpers/logger';
 import Router from '../api/router';
 

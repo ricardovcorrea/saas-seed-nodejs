@@ -1,6 +1,6 @@
 import { Service } from "typedi";
 
-import DatabaseManager from '../../../database/connection';
+import DatabaseManager from '../../../database/databaseManager';
 
 @Service()
 export default class ClientsRepository {
