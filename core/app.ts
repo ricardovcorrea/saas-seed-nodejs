@@ -6,21 +6,25 @@ import "reflect-metadata";
 
 import { Service, Container } from "typedi";
 
-import DatabaseConnection from '../database/connection';
-
 import bodyParser from 'body-parser';
 import compress from 'compression';
-import glob from 'glob';
+
+import DatabaseManager from '../database/connection';
+import Logger from '../helpers/logger';
+import Router from '../api/router';
 
 @Service()
 export default class App {
 
+    constructor(private logger: Logger, private databaseManager: DatabaseManager, private router: Router) { }
+
     async setup(app) {
+        this.logger.log(`Starting service setup at ${process.env.NODE_ENV}...`);
+
         const setups = [
-            this.configExpress(app),
             this.configDatabase(),
+            this.configExpress(app),
             this.configRoutes(app),
-            this.configStaticFiles(app),
             this.configErrorLogging(app),
         ];
 
@@ -28,35 +32,24 @@ export default class App {
     }
 
     async configExpress(app: any) {
+        this.logger.log('Configurating Express...');
+
+        const finalPath = path.join(Container.get('rootPath'), '/admin/build');
+
         app.use(bodyParser.json());
         app.use(compress());
         app.use(bodyParser.urlencoded({ extended: true }));
+        app.use(express.static(finalPath));
     }
 
     async configRoutes(app: any) {
-        const adminControllers = glob.sync(`${Container.get('rootPath')}/api/controllers/admin/*.ts`);
-        const coreControllers = glob.sync(`${Container.get('rootPath')}/api/controllers/core/*.ts`);
-
-        for (let controllerPath of [...adminControllers, ...coreControllers]) {
-            const Controller = require(controllerPath);
-            new Controller.default(app);
-        }
-
-        app.get('/', (req, res) => {
-            const finalPath = path.join(Container.get('rootPath'), '/admin/build/index.html')
-            res.sendFile(finalPath);
-        });
+        await this.router.setup(app);
     }
 
     async configDatabase() {
-        let databaseConnection = Container.get(DatabaseConnection);
+        this.logger.log(`Connecting to ${process.env.NODE_ENV} database...`);
 
-        await databaseConnection.setup();
-    }
-
-    async configStaticFiles(app: any) {
-        const finalPath = path.join(Container.get('rootPath'), '/admin/build');
-        app.use(express.static(finalPath));
+        await this.databaseManager.getCoreConnection();
     }
 
     async configErrorLogging(app: any) {

@@ -4,27 +4,27 @@ import { Service } from "typedi";
 import { ConnectionManager, Connection } from 'typeorm';
 
 @Service()
-export default class DatabaseConnection {
+export default class DatabaseManager {
     connectionManager: ConnectionManager;
 
     constructor() {
         this.connectionManager = new ConnectionManager();
     }
 
-    async setup() {
-        await this.createConnection('main', process.env.DB_MAIN_DATABASE, 'database/migration/main/*.ts', 'core/model/*.ts');
+    async getCoreConnection(): Promise<Connection> {
+        if(this.connectionManager.has('core')) {
+            return this.connectionManager.get('core');
+        } 
+
+        return await this.createConnection('core', process.env.DB_MAIN_DATABASE, 'database/migration/core/*.ts', 'core/model/*.ts');
     }
 
-    async createClientConnection(name: string) {
-        await this.createConnection(name, `${process.env.DB_MAIN_DATABASE}_${name}`, 'database/migration/client/*.ts', 'core/model/*.ts');
-    }
+    async getClientConnection(clientSlug: string): Promise<Connection> {
+        if(this.connectionManager.has(clientSlug)) {
+            return this.connectionManager.get(clientSlug);
+        } 
 
-    async getMainConnection(): Promise<Connection> {
-        return this.connectionManager.get('main');
-    }
-
-    async getClientConnection(clientId: Number) {
-        return this.connectionManager.get(clientId.toString());
+        return await this.createConnection(clientSlug, `${process.env.DB_MAIN_DATABASE}_${clientSlug}`, 'database/migration/client/*.ts', 'core/model/*.ts');
     }
 
     async createConnection(name: string, databaseName: string, migrations?: string, entities?: string): Promise<any> {

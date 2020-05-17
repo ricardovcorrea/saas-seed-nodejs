@@ -3,28 +3,26 @@ import dotenv from 'dotenv';
 import { Container } from "typedi";
 
 import App from './core/app';
+import Logger from './helpers/logger';
 
 (async () => {
-  try {    
-    dotenv.config();
-    Container.set("rootPath", __dirname);
+  dotenv.config();
+  Container.set("rootPath", __dirname);
 
-    const expressApp = express();
-    
-    const app = Container.get(App);
-    await app.setup(expressApp);
-    
-    const port = Number.parseInt(process.env.PORT) || 5000;
-    expressApp.listen(port, (error: any) => {
-      if (error) {
-        console.log(error);
-      }
+  const logger = Container.get(Logger);
+  const app = Container.get(App);
 
-      console.log(`Server is listening on port ${port}`);
-    });
+  const expressApp = express();
 
-  } catch (error) {
-    console.log(error);
-  }
+  await app.setup(expressApp);
+
+  const port = Number.parseInt(process.env.PORT) || 5000;
+  expressApp.listen(port, (error: any) => {
+    if (error) {
+      logger.log(error);
+    }
+
+    logger.log(`Server is listening on port ${port}`);
+  });
 
 })();
